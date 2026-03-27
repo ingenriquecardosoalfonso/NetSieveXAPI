@@ -1,20 +1,16 @@
-FROM python:3.11-slim
+FROM python:3.11-bullseye
 
-# Paso 1 - herramientas base
 RUN apt-get update && apt-get install -y \
-    curl \
+    wget \
     gnupg \
     apt-transport-https \
-    unixodbc \
     unixodbc-dev \
-    odbcinst \
     && rm -rf /var/lib/apt/lists/*
 
-# Paso 2 - repositorio de Microsoft
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-    && curl https://packages.microsoft.com/config/debian/12/prod.list > /etc/apt/sources.list.d/mssql-release.list
+RUN wget -qO- https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+RUN wget -q https://packages.microsoft.com/config/debian/11/prod.list \
+    -O /etc/apt/sources.list.d/mssql-release.list
 
-# Paso 3 - instalar driver ODBC 18
 RUN apt-get update && ACCEPT_EULA=Y apt-get install -y msodbcsql18 \
     && rm -rf /var/lib/apt/lists/*
 
