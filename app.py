@@ -9,6 +9,7 @@ from flasgger import Swagger
 
 from routes.auth_routes import auth_bp
 from routes.usuarios_routes import usuarios_bp
+from routes.metrics_routes import metrics_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -64,6 +65,7 @@ with app.app_context():
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(usuarios_bp)
+app.register_blueprint(metrics_bp)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)

@@ -1,24 +1,23 @@
 from flask import Blueprint, jsonify
-from models.usuario import Usuario
-from dtos.usuario_dto import UsuarioDTO
+from models.metric import Metric
+from dtos.metric_dto import MetricDTO
 from utils.jwt_decorator import token_required
 
-usuarios_bp = Blueprint('usuarios', __name__)
+metrics_bp = Blueprint('metrics', __name__)
 
-
-@usuarios_bp.route('/api/usuarios', methods=['GET'])
+@metrics_bp.route('/api/metrics', methods=['GET'])
 @token_required
-def get_users():
+def get_metrics():
     """
-    Get list of users
+    Get list of metrics
     ---
     tags:
-      - Users
+      - Metrics
     security:
       - Bearer: []
     responses:
       200:
-        description: List of users
+        description: List of metrics
         schema:
           type: array
           items:
@@ -59,13 +58,12 @@ def get_users():
               example: Error interno del servidor
     """
     try:
-        usuarios = Usuario.query.all()
+        metrics = Metric.query.all()
 
-        if not usuarios:
+        if not metrics:
             return jsonify([]), 200
 
-        resultado = [UsuarioDTO(u).to_dict() for u in usuarios]
-
+        resultado = [MetricDTO(m).to_dict() for m in metrics]
         return jsonify(resultado), 200
 
     except Exception as e:
