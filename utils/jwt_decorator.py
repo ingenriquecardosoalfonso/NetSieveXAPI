@@ -1,7 +1,7 @@
 import jwt
 from flask import request, jsonify, g
 from functools import wraps
-from config import Config  # ← importa Config directamente
+from config import Config  
 
 def token_required(f):
     @wraps(f)
@@ -15,15 +15,15 @@ def token_required(f):
                 token = parts[1]
 
         if not token:
-            return jsonify({"mensaje": "Token no proporcionado"}), 403
+            return jsonify({"message": "Token not provided"}), 403
 
         try:
             payload = jwt.decode(token, Config.SECRET_KEY, algorithms=["HS256"])
-            g.usuario_id = payload.get('user_id')  # ← coincide con lo que guarda auth_service
+            g.user_id = payload.get('user_id')  
         except jwt.ExpiredSignatureError:
-            return jsonify({"mensaje": "Token expirado"}), 401
+            return jsonify({"message": "Token expired"}), 401
         except jwt.InvalidTokenError:
-            return jsonify({"mensaje": "Token inválido"}), 401
+            return jsonify({"message": "Invalid token"}), 401
 
         return f(*args, **kwargs)
 

@@ -1,12 +1,11 @@
 from flask import Blueprint, jsonify
-from models.usuario import Usuario
-from dtos.usuario_dto import UsuarioDTO
+from models.user import User
+from dtos.user_dto import UserDTO
 from utils.jwt_decorator import token_required
 
-usuarios_bp = Blueprint('usuarios', __name__)
+users_bp = Blueprint('users', __name__)
 
-
-@usuarios_bp.route('/api/usuarios', methods=['GET'])
+@users_bp.route('/api/users', methods=['GET'])
 @token_required
 def get_users():
     """
@@ -27,7 +26,7 @@ def get_users():
               id:
                 type: integer
                 example: 1
-              nombre:
+              name:
                 type: string
                 example: Juan
               email:
@@ -59,12 +58,12 @@ def get_users():
               example: Error interno del servidor
     """
     try:
-        usuarios = Usuario.query.all()
+        users = User.query.all()
 
-        if not usuarios:
+        if not users:
             return jsonify([]), 200
 
-        resultado = [UsuarioDTO(u).to_dict() for u in usuarios]
+        resultado = [UserDTO(u).to_dict() for u in users]
 
         return jsonify(resultado), 200
 

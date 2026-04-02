@@ -8,7 +8,7 @@ from extensions import db
 from flasgger import Swagger
 
 from routes.auth_routes import auth_bp
-from routes.usuarios_routes import usuarios_bp
+from routes.users_routes import users_bp
 from routes.metrics_routes import metrics_bp
 
 app = Flask(__name__)
@@ -64,7 +64,7 @@ with app.app_context():
     db.create_all()
 
 app.register_blueprint(auth_bp)
-app.register_blueprint(usuarios_bp)
+app.register_blueprint(users_bp)
 app.register_blueprint(metrics_bp)
 
 if __name__ == '__main__':

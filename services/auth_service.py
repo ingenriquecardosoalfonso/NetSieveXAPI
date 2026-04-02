@@ -1,4 +1,4 @@
-from models.usuario import Usuario
+from models.user import User
 from extensions import db
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt, datetime
@@ -6,21 +6,21 @@ from config import Config
 
 class AuthService:
 
-    def register(self, nombre, email, password):
+    def register(self, name, email, password):
         hashed = generate_password_hash(password)
-        usuario = Usuario(nombre=nombre, email=email, password=hashed)
-        db.session.add(usuario)
+        user = User(name=name, email=email, password=hashed)
+        db.session.add(user)
         db.session.commit()
-        return usuario
+        return user
 
     def login(self, email, password):
-        usuario = Usuario.query.filter_by(email=email).first()
+        user = User.query.filter_by(email=email).first()
 
-        if not usuario or not check_password_hash(usuario.password, password):
+        if not user or not check_password_hash(user.password, password):
             return None
 
         token = jwt.encode({
-            "user_id": usuario.id,
+            "user_id": user.id,
             "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=2)
         }, Config.SECRET_KEY, algorithm="HS256")
 

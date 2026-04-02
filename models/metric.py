@@ -2,8 +2,47 @@ from extensions import db
 
 class Metric(db.Model):
     __tablename__ = 'ViewMetrics'
-    
-    totalFlows = db.Column(db.Integer, primary_key=True, nullable=False)
+
+    total_flows         = db.Column('total_flows',         db.Integer,       primary_key=True)
+    malicious_pct       = db.Column('malicious_pct',       db.Numeric(10,2))
+    avg_pkts_per_sec    = db.Column('avg_pkts_per_sec',    db.Numeric(10,2))
+    avg_duration_sec    = db.Column('avg_duration_sec',    db.Numeric(10,4))
+    flow_pkts_per_sec               = db.Column('flow_pkts_per_sec',               db.Numeric(10,2))
+    avg_bytes_per_sec   = db.Column('avg_bytes_per_sec',   db.Numeric(10,2))
+    threat_pct          = db.Column('threat_pct',          db.Numeric(10,2))
+    avg_duration        = db.Column('avg_duration',        db.Numeric(10,4))
+    min_pkts            = db.Column('min_pkts',            db.Float)
+    max_pkts            = db.Column('max_pkts',            db.Float)
+    min_dur             = db.Column('min_dur',             db.Float)
+    max_dur             = db.Column('max_dur',             db.Float)
+    min_pay             = db.Column('min_pay',             db.Float)
+    max_pay             = db.Column('max_pay',             db.Float)
+    min_fwd             = db.Column('min_fwd',             db.BigInteger)
+    max_fwd             = db.Column('max_fwd',             db.BigInteger)
+    min_bwd             = db.Column('min_bwd',             db.BigInteger)
+    max_bwd             = db.Column('max_bwd',             db.BigInteger)
+    min_syn             = db.Column('min_syn',             db.Integer)
+    max_syn             = db.Column('max_syn',             db.Integer)
+    min_ack             = db.Column('min_ack',             db.Integer)
+    max_ack             = db.Column('max_ack',             db.Integer)
+    min_rst             = db.Column('min_rst',             db.Integer)
+    max_rst             = db.Column('max_rst',             db.Integer)
+    min_fin             = db.Column('min_fin',             db.Integer)
+    max_fin             = db.Column('max_fin',             db.Integer)
+    min_fwd_avg         = db.Column('min_fwd_avg',         db.Float)
+    max_fwd_avg         = db.Column('max_fwd_avg',         db.Float)
+    min_fwd_min         = db.Column('min_fwd_min',         db.Float)
+    max_fwd_min         = db.Column('max_fwd_min',         db.Float)
+    min_fwd_iat         = db.Column('min_fwd_iat',         db.Float)
+    max_fwd_iat         = db.Column('max_fwd_iat',         db.Float)
+    min_bwd_iat         = db.Column('min_bwd_iat',         db.Float)
+    max_bwd_iat         = db.Column('max_bwd_iat',         db.Float)
+    min_fwd_win         = db.Column('min_fwd_win',         db.Integer)
+    max_fwd_win         = db.Column('max_fwd_win',         db.Integer)
+    min_bwd_win         = db.Column('min_bwd_win',         db.Integer)
+    max_bwd_win         = db.Column('max_bwd_win',         db.Integer)
+    min_fwd_lwin        = db.Column('min_fwd_lwin',        db.Integer)
+    max_fwd_lwin        = db.Column('max_fwd_lwin',        db.Integer)
 
     def __repr__(self):
-        return f'<Metric totalFlows={self.totalFlows}>'
+        return f'<Metric total_flows={self.total_flows}>'

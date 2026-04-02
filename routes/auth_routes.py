@@ -8,7 +8,7 @@ service = AuthService()
 @auth_bp.route('/api/auth/register', methods=['POST'])
 def register():
     """
-    Registrar usuario
+    Create user
     ---
     tags:
       - Auth
@@ -19,11 +19,11 @@ def register():
         schema:
           type: object
           required:
-            - nombre
+            - name
             - email
             - password
           properties:
-            nombre:
+            name:
               type: string
               example: Juan
             email:
@@ -34,23 +34,23 @@ def register():
               example: 123456
     responses:
       200:
-        description: Usuario creado correctamente
+        description: User created successfully
       400:
-        description: Error en los datos
+        description: Error in the data
     """
     try:
         data = request.get_json()
 
-        if not data or not data.get("nombre") or not data.get("email") or not data.get("password"):
+        if not data or not data.get("name") or not data.get("email") or not data.get("password"):
             return jsonify({"mensaje": "Datos incompletos"}), 400
 
         service.register(
-            data['nombre'],
+            data['name'],
             data['email'],
             data['password']
         )
 
-        return jsonify({"mensaje": "Usuario creado correctamente"}), 200
+        return jsonify({"mensaje": "User created successfully"}), 200
 
     except Exception as e:
         return jsonify({"mensaje": str(e)}), 500
@@ -59,7 +59,7 @@ def register():
 @auth_bp.route('/api/auth/login', methods=['POST'])
 def login():
     """
-    Login de usuario
+    Login of user
     ---
     tags:
       - Auth
@@ -78,7 +78,7 @@ def login():
               example: juan@test.com
             password:
               type: string
-              example: 123456
+              example: "123456"
     responses:
       200:
         description: Retorna un token JWT
