@@ -3,6 +3,8 @@ import joblib
 import pandas as pd
 from pathlib import Path
 
+from dtos.prediction_dto import PredictionDTO
+
 MODEL_DIR = Path(__file__).parent / "predictive"
 
 # Feature names exactly as the models expect them
@@ -65,15 +67,13 @@ class MLService:
 
         pipeline      = self.models[model_name]
         probabilities = pipeline.predict_proba(df)[0]
-        return {
-            "model":         model_name,
-            "prediction":    pipeline.predict(df)[0],
-            "confidence":    round(float(probabilities.max()), 4),
-            "probabilities": {
-                cls: round(float(p), 4)
-                for cls, p in zip(pipeline.classes_, probabilities)
-            },
-        }
+
+        return PredictionDTO(
+            model         = model_name,
+            prediction    = pipeline.predict(df)[0],
+            confidence    = round(float(probabilities.max()), 4),
+            probabilities = {cls: round(float(p), 4) for cls, p in zip(pipeline.classes_, probabilities)}
+        ).to_dict()
     
 
        
