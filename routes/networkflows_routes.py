@@ -270,7 +270,7 @@ def delete(id):
 @network_flow_bp.route('/api/network-flows/analyze', methods=['POST'])
 def analyze():
     """
-    Analyze a network flow without persisting it
+    Analyze a network flow and predict if it's benign or malicious using the ML models
     ---
     tags:
       - Network Flows
@@ -386,6 +386,10 @@ def analyze():
         data = request.get_json()
         if not data:
             return jsonify({"message": "Incomplete data"}), 400
+
+        VALID_MODELS = {"random_forest", "decision_tree", "knn"}
+        if data.get('model') not in VALID_MODELS:
+            return jsonify({"message": f"Invalid or missing model. Choose from: {list(VALID_MODELS)}"}), 400
 
         result = service.analyze(data)
         return jsonify(result), 200
