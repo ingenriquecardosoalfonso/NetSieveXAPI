@@ -29,5 +29,4 @@ class NetworkFlowService:
         return self.repo.delete(id)
     
     def analyze(self, data):
-        flow = self.repo.analyze(data)
-        return NetworkFlowDTO(flow).to_dict()
+        return self.repo.analyze(data)

@@ -28,7 +28,7 @@ swagger_config = {
     "static_url_path": "/flasgger_static",
     "swagger_ui": True,
     "specs_route": "/apidocs/",
-    "title": "A swagger API",
+    "title": "NetSieveX API",
     "version": "0.0.1",
     "securityDefinitions": {
         "Bearer": {
@@ -43,7 +43,7 @@ swagger_config = {
 swagger_template = {
     "swagger": "2.0",
     "info": {
-        "title": "A swagger API",
+        "title": "NetSieveX API",
         "version": "0.0.1",
     },
     "securityDefinitions": {
