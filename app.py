@@ -6,7 +6,6 @@ from flask import Flask
 from config import Config
 from extensions import db
 from flasgger import Swagger
-from flask_cors import CORS
 
 from routes.auth_routes import auth_bp
 from routes.users_routes import users_bp
@@ -17,10 +16,6 @@ app = Flask(__name__)
 app.url_map.strict_slashes = False
 app.config.from_object(Config)
 
-CORS(app, origins=[
-    "http://localhost:5173",        
-    "https://netsievexapi-h6eagwbhczcqaqcy.canadacentral-01.azurewebsites.net"  
-])
 
 swagger_config = {
     "headers": [],
