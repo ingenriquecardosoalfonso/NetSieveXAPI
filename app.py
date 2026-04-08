@@ -11,6 +11,7 @@ from routes.auth_routes import auth_bp
 from routes.users_routes import users_bp
 from routes.metrics_routes import metrics_bp
 from routes.networkflows_routes import network_flow_bp
+from routes.ml_routes import ml_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -68,6 +69,7 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(users_bp)
 app.register_blueprint(metrics_bp)
 app.register_blueprint(network_flow_bp)
+app.register_blueprint(ml_bp)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)
