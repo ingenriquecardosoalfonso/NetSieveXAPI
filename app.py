@@ -18,11 +18,10 @@ app.url_map.strict_slashes = False
 app.config.from_object(Config)
 
 CORS(app,
-     resources={r"/api/*": {"origins": "http://localhost:5173"}},
+     origins=["http://localhost:5173", "https://localhost:5173"],
      supports_credentials=True,
      allow_headers=["Content-Type", "Authorization"],
      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-     expose_headers=["Authorization"]
 )
 
 swagger_config = {
