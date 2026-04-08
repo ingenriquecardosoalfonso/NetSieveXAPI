@@ -3,6 +3,7 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from flask import Flask
+from flask_cors import CORS
 from config import Config
 from extensions import db
 from flasgger import Swagger
@@ -15,6 +16,13 @@ from routes.networkflows_routes import network_flow_bp
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 app.config.from_object(Config)
+
+CORS(app,                                              # 👈 agrega esto
+     origins=["http://localhost:5173"],
+     supports_credentials=True,
+     allow_headers=["Content-Type", "Authorization"],
+     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+)
 
 swagger_config = {
     "headers": [],
