@@ -10,6 +10,8 @@ from dtos.metricsgroup_dto import MetricGroupDTO
 from dtos.classdistribution_dto import ClassDistributionDTO
 from dtos.distributionprotocol_dto import DistributionProtocolDTO
 from dtos.distributionservice_dto import DistributionServiceDTO
+from models.metricsgrouppercentage import MetricGroupPercentage
+from dtos.metricsgrouppercentage_dto import MetricGroupPercentageDTO
 from utils.jwt_decorator import token_required
 from utils.route_helpers import query_all
 
@@ -91,6 +93,43 @@ def get_metrics_group():
         description: Error interno del servidor
     """
     return query_all(MetricGroup, MetricGroupDTO)
+
+@metrics_bp.route('/groupPercentage', methods=['GET'])
+@token_required
+def get_metrics_group_percentage():
+    """
+    Get metrics grouped by traffic class with percentage
+    ---
+    tags:
+      - Metrics
+    security:
+      - Bearer: []
+    responses:
+      200:
+        description: List of metrics grouped by traffic class
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: 550e8400-e29b-41d4-a716-446655440000
+              trafficClass:
+                type: string
+                example: Normal
+              
+              percentage:
+                type: number
+                example: 35
+      401:
+        description: Token inválido o no enviado
+      403:
+        description: Token no proporcionado
+      500:
+        description: Error interno del servidor
+    """
+    return query_all(MetricGroupPercentage, MetricGroupPercentageDTO)
 
 
 @metrics_bp.route('/distributions/class', methods=['GET'])
