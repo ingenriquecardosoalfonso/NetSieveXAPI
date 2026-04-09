@@ -28,5 +28,4 @@ class NetworkFlowService:
     def delete(self, id):
         return self.repo.delete(id)
     
-    def analyze(self, data):
-        return self.repo.analyze(data)
+    
