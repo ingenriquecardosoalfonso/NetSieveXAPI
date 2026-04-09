@@ -9,7 +9,7 @@ class MetricGroupPercentageDTO:
             return float(v) if v is not None else None
 
         return {
-            "trafficClass":            self.traffic_class,
+            "traffic_class":            self.traffic_class,
             "total_rows":                  f(self.total_rows),
             "percentage":                  f(self.percentage),
         }
