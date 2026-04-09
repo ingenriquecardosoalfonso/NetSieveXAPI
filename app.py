@@ -7,7 +7,6 @@ from flask_cors import CORS
 from config import Config
 from extensions import db
 from flasgger import Swagger
-
 from routes.auth_routes import auth_bp
 from routes.users_routes import users_bp
 from routes.metrics_routes import metrics_bp
