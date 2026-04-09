@@ -1,8 +1,5 @@
 from extensions import db
-from models.mlservice import MLService
 from models.networkflows import NetworkFlow
-
-_ml_service = MLService() # Global instance of MLService to avoid reloading models on every analyze call
 
 class NetworkFlowRepository:
 
@@ -83,10 +80,8 @@ class NetworkFlowRepository:
         db.session.commit()
         return True
     
-    def analyze(self, data):
-        selected_model = data.get('model') 
-        
-        flow = NetworkFlow(
+    def build_flow(self, data): # Helper to convert incoming JSON to NetworkFlow object (without saving)
+        return NetworkFlow(
             proto                    = data.get('proto'),
             service                  = data.get('service'),
             flow_duration            = data.get('flow_duration'),
@@ -118,12 +113,11 @@ class NetworkFlowRepository:
             active_min               = data.get('active_min'),
             id_resp_p                = data.get('id_resp_p'),
             bwd_pkts_per_sec         = data.get('bwd_pkts_per_sec'),
-            Attack_grouped           = None  #data.get('Attack_grouped')
-        )   
-        results  = _ml_service.predict(flow, model_name=selected_model)      
-        flow.Attack_grouped = results['prediction'] 
+            Attack_grouped           = None
+        )
 
+    def save_flow(self, flow, prediction): # After getting prediction results, save the flow with the predicted attack type
+        flow.Attack_grouped = prediction
         db.session.add(flow)
         db.session.commit()
-        return results 
         
