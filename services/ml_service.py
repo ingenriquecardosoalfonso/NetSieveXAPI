@@ -105,19 +105,42 @@ class MLService:
     def _get_shap_features(self, model_name: str, pipeline, df: pd.DataFrame, prediction: str) -> list:
         try:
             df_transformed = pipeline.named_steps["preprocess"].transform(df)
+            
+            # Convert sparse to dense if needed
+            if hasattr(df_transformed, "toarray"):
+                df_transformed = df_transformed.toarray()
+                
             feature_names  = pipeline.named_steps["preprocess"].get_feature_names_out()
             prediction_idx = pipeline.classes_.tolist().index(prediction)
 
             if model_name in ("decision_tree", "random_forest"):
                 explainer   = self.explainers[model_name]
                 shap_values = explainer.shap_values(df_transformed)
-                values      = shap_values[prediction_idx][0]
+                
+                if isinstance(shap_values, list):
+                    # Multi-class list: [n_classes][n_samples, n_features]
+                    values = shap_values[prediction_idx][0]
+                elif shap_values.ndim == 3:
+                    # 3D array: [n_samples, n_features, n_classes]
+                    values = shap_values[0, :, prediction_idx]
+                else:
+                    # 2D fallback
+                    values = shap_values[0]
 
             elif model_name == "knn":
                 if self.explainers["knn"] is None:
                     return []
-                shap_values = self.explainers["knn"].shap_values(df_transformed, nsamples=100)
-                values      = shap_values[prediction_idx][0]
+                shap_values = self.explainers["knn"].shap_values(
+                    df_transformed,
+                    nsamples=50,
+                    l1_reg="num_features(5)"
+                )
+                if isinstance(shap_values, list):
+                    values = shap_values[prediction_idx][0]
+                elif shap_values.ndim == 3:
+                    values = shap_values[0, :, prediction_idx]
+                else:
+                    values = shap_values[0]
 
             importance = sorted(
                 zip(feature_names, values),
