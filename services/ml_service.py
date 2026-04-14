@@ -5,8 +5,16 @@ import pandas as pd
 from pathlib import Path
 import shap
 
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))  # adds NetSieveX/ to path
+
 from dtos.prediction_dto import PredictionDTO
 from repositories.network_flow_repository import NetworkFlowRepository
+
+from services.features_service import FeaturesService
+service = FeaturesService()
+
 
 MODEL_DIR = Path(__file__).parent.parent / "predictive" / "models"
 DATA_PATH = Path(__file__).parent.parent / "predictive" / "data" / "background_sample.npy"
@@ -105,8 +113,7 @@ class MLService:
     def _get_shap_features(self, model_name: str, pipeline, df: pd.DataFrame, prediction: str) -> list:
         try:
             df_transformed = pipeline.named_steps["preprocess"].transform(df)
-            
-            # Convert sparse to dense if needed
+            importance = []
             if hasattr(df_transformed, "toarray"):
                 df_transformed = df_transformed.toarray()
                 
@@ -118,13 +125,10 @@ class MLService:
                 shap_values = explainer.shap_values(df_transformed)
                 
                 if isinstance(shap_values, list):
-                    # Multi-class list: [n_classes][n_samples, n_features]
                     values = shap_values[prediction_idx][0]
                 elif shap_values.ndim == 3:
-                    # 3D array: [n_samples, n_features, n_classes]
                     values = shap_values[0, :, prediction_idx]
                 else:
-                    # 2D fallback
                     values = shap_values[0]
 
             elif model_name == "knn":
@@ -142,7 +146,7 @@ class MLService:
                 else:
                     values = shap_values[0]
 
-            importance = sorted(
+                importance = sorted(
                 zip(feature_names, values),
                 key=lambda x: abs(x[1]),
                 reverse=True
@@ -178,15 +182,22 @@ class MLService:
     
     def analyze(self, data):
         selected_model = data.get('model')
-
-        # 1. Build the flow object
         flow = self.repo.build_flow(data)
-
-        # 2. Run prediction (business logic - belongs in service)
         results = self.predict(flow, model_name=selected_model)
-
-        # 3. Save to DB
+        for feature in results['shap_features']:
+            feature_key = feature['feature']
+            featureData = service.get_by_key(feature_key, results['prediction'])
+            
+            if featureData:
+                feature.update({
+                    'feature_name':         featureData['feature_name'],
+                    'description':          featureData['description'],
+                    'predicted_class':      featureData['predicted_class'],
+                    'description_positive': featureData['description_positive'],
+                    'description_negative': featureData['description_negative'],
+                    'state':                featureData['state'],
+                })
+        
         self.repo.save_flow(flow, results['prediction'])
-
         return results
        
