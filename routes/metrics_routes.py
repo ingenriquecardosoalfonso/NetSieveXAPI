@@ -1,5 +1,6 @@
 # routes/metrics.py
 from flask import Blueprint
+from dtos.trafficclassdistribution_dto import TrafficClassDistributionDTO
 from models.metric import Metric
 from models.metricsgroup import MetricGroup
 from models.classdistribution import ClassDistribution
@@ -12,6 +13,7 @@ from dtos.distributionprotocol_dto import DistributionProtocolDTO
 from dtos.distributionservice_dto import DistributionServiceDTO
 from models.metricsgrouppercentage import MetricGroupPercentage
 from dtos.metricsgrouppercentage_dto import MetricGroupPercentageDTO
+from models.trafficclassdistribution import TrafficClassDistribution
 from utils.jwt_decorator import token_required
 from utils.route_helpers import query_all
 
@@ -241,3 +243,40 @@ def get_service_distribution():
         description: Error interno del servidor
     """
     return query_all(DistributionService, DistributionServiceDTO)
+  
+  
+@metrics_bp.route('/distributions/trafficclassdistribution', methods=['GET'])
+@token_required 
+def get_trafficclass_distribution():
+  """
+  Get traffic class distribution
+  ---
+  tags:
+    - Metrics
+  security:
+    - Bearer: []
+  responses:
+    200:
+      description: Distribution of attacks grouped by service
+      schema:
+        type: array
+        items:
+          type: object
+          properties:
+            label:
+              type: string
+              example: Normal
+            count:
+              type: integer
+              example: 950
+            percentage:
+              type: number
+              example: 35.75
+    401:
+      description: Token inválido o no enviado
+    403:
+      description: Token no proporcionado
+    500:
+      description: Error interno del servidor
+  """
+  return query_all(TrafficClassDistribution, TrafficClassDistributionDTO)
