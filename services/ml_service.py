@@ -114,6 +114,7 @@ class MLService:
         try:
             df_transformed = pipeline.named_steps["preprocess"].transform(df)
             importance = []
+            values = []
             if hasattr(df_transformed, "toarray"):
                 df_transformed = df_transformed.toarray()
                 
@@ -146,7 +147,7 @@ class MLService:
                 else:
                     values = shap_values[0]
 
-                importance = sorted(
+            importance = sorted(
                 zip(feature_names, values),
                 key=lambda x: abs(x[1]),
                 reverse=True
