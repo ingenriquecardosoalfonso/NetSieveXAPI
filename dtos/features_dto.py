@@ -20,3 +20,5 @@ class FeaturesDTO:
             "description_negative":     self.description_negative,
             "state":                    self.state,
         }
+
+

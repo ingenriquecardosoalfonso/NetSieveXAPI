@@ -80,7 +80,7 @@ class NetworkFlowRepository:
         db.session.commit()
         return True
     
-    def build_flow(self, data): # Helper to convert incoming JSON to NetworkFlow object (without saving)
+    def build_flow(self, data): 
         return NetworkFlow(
             proto                    = data.get('proto'),
             service                  = data.get('service'),
@@ -116,8 +116,9 @@ class NetworkFlowRepository:
             Attack_grouped           = None
         )
 
-    def save_flow(self, flow, prediction): # After getting prediction results, save the flow with the predicted attack type
+    def save_flow(self, flow, prediction): 
         flow.Attack_grouped = prediction
         db.session.add(flow)
         db.session.commit()
         
+     
