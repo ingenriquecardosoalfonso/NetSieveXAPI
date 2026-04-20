@@ -5,7 +5,7 @@ from utils.jwt_decorator import token_required
 
 users_bp = Blueprint('users', __name__)
 
-@users_bp.route('/api/users', methods=['GET'])
+@users_bp.route('/users', methods=['GET'])
 @token_required
 def get_users():
     """

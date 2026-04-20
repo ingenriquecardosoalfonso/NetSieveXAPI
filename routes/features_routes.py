@@ -5,7 +5,7 @@ features_bp = Blueprint('features', __name__)
 service = FeaturesService()
 
 
-@features_bp.route('/api/features/<int:id>', methods=['GET'])
+@features_bp.route('/features/<int:id>', methods=['GET'])
 def get_by_id(id):
     """
     Get a feature by ID

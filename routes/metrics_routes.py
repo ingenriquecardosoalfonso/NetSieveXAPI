@@ -17,7 +17,7 @@ from models.trafficclassdistribution import TrafficClassDistribution
 from utils.jwt_decorator import token_required
 from utils.route_helpers import query_all
 
-metrics_bp = Blueprint('metrics', __name__, url_prefix='/api/metrics')
+metrics_bp = Blueprint('metrics', __name__, url_prefix='/metrics')
 
 
 @metrics_bp.route('/', methods=['GET'])

@@ -4,7 +4,7 @@ from services.ml_service import MLService
 ml_bp   = Blueprint('ml', __name__)
 service = MLService()
 
-@ml_bp.route('/api/ml/analyze', methods=['POST'])
+@ml_bp.route('/ml/analyze', methods=['POST'])
 def analyze():
     """
     Analyze a network flow and predict if it's benign or malicious using the ML models

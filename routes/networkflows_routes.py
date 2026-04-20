@@ -6,7 +6,7 @@ network_flow_bp = Blueprint('network_flow', __name__)
 service = NetworkFlowService()
 
 
-@network_flow_bp.route('/api/network-flows', methods=['GET'])
+@network_flow_bp.route('/network-flows', methods=['GET'])
 @token_required 
 def get_all():
     """
@@ -27,7 +27,7 @@ def get_all():
         return jsonify({"message": str(e)}), 500
 
 
-@network_flow_bp.route('/api/network-flows/<int:id>', methods=['GET'])
+@network_flow_bp.route('/network-flows/<int:id>', methods=['GET'])
 @token_required 
 def get_by_id(id):
     """
@@ -58,7 +58,7 @@ def get_by_id(id):
         return jsonify({"message": str(e)}), 500
 
 
-@network_flow_bp.route('/api/network-flows', methods=['POST'])
+@network_flow_bp.route('/network-flows', methods=['POST'])
 @token_required 
 def create():
     """
@@ -188,7 +188,7 @@ def create():
         return jsonify({"message": str(e)}), 500
 
 
-@network_flow_bp.route('/api/network-flows/<int:id>', methods=['PUT'])
+@network_flow_bp.route('/network-flows/<int:id>', methods=['PUT'])
 @token_required 
 def update(id):
     """
@@ -242,7 +242,7 @@ def update(id):
         return jsonify({"message": str(e)}), 500
 
 
-@network_flow_bp.route('/api/network-flows/<int:id>', methods=['DELETE'])
+@network_flow_bp.route('/network-flows/<int:id>', methods=['DELETE'])
 @token_required 
 def delete(id):
     """
