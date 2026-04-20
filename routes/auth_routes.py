@@ -5,12 +5,8 @@ auth_bp = Blueprint('auth', __name__)
 service = AuthService()
 
 
-@auth_bp.route('/auth/register', methods=['POST', 'OPTIONS'])
+@auth_bp.route('/auth/register', methods=['POST'])
 def register():
-    
-    if request.method == 'OPTIONS':
-        return '', 200
-
     """
     Create user
     ---
@@ -18,7 +14,7 @@ def register():
       - Auth
     """
     try:
-        data = request.get_json()
+        data = request.get_json(silent=True, force=True)
 
         if not data or not data.get("name") or not data.get("email") or not data.get("password"):
             return jsonify({"mensaje": "Datos incompletos"}), 400
@@ -35,12 +31,8 @@ def register():
         return jsonify({"mensaje": str(e)}), 500
 
 
-@auth_bp.route('/auth/login', methods=['POST', 'OPTIONS'])
+@auth_bp.route('/auth/login', methods=['POST'])
 def login():
-    
-    if request.method == 'OPTIONS':
-        return '', 200
-
     """
     Login of user
     ---
@@ -48,7 +40,7 @@ def login():
       - Auth
     """
     try:
-        data = request.get_json()
+        data = request.get_json(silent=True, force=True)
 
         if not data or not data.get("email") or not data.get("password"):
             return jsonify({"mensaje": "Datos incompletos"}), 400
