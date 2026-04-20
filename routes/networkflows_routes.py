@@ -1,11 +1,13 @@
 from flask import Blueprint, request, jsonify
 from services.network_flow_service import NetworkFlowService
+from utils.jwt_decorator import token_required
 
 network_flow_bp = Blueprint('network_flow', __name__)
 service = NetworkFlowService()
 
 
 @network_flow_bp.route('/api/network-flows', methods=['GET'])
+@token_required 
 def get_all():
     """
     Get all network flows
@@ -26,6 +28,7 @@ def get_all():
 
 
 @network_flow_bp.route('/api/network-flows/<int:id>', methods=['GET'])
+@token_required 
 def get_by_id(id):
     """
     Get a network flow by ID
@@ -56,6 +59,7 @@ def get_by_id(id):
 
 
 @network_flow_bp.route('/api/network-flows', methods=['POST'])
+@token_required 
 def create():
     """
     Create a new network flow
@@ -185,6 +189,7 @@ def create():
 
 
 @network_flow_bp.route('/api/network-flows/<int:id>', methods=['PUT'])
+@token_required 
 def update(id):
     """
     Update a network flow
@@ -238,6 +243,7 @@ def update(id):
 
 
 @network_flow_bp.route('/api/network-flows/<int:id>', methods=['DELETE'])
+@token_required 
 def delete(id):
     """
     Delete a network flow
