@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from flask import Flask, request
+from flask import Flask
 from flask_cors import CORS
 from config import Config
 from extensions import db
@@ -26,34 +26,10 @@ CORS(app, resources={
         ],
         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         "allow_headers": ["Content-Type", "Authorization"],
-        "supports_credentials": True
+        "supports_credentials": True,
+        "automatic_options": True
     }
 })
-
-
-@app.after_request
-def after_request(response):
-    origin = request.headers.get("Origin")
-
-    allowed_origins = [
-        "http://localhost:5173",
-        "https://localhost:5173",
-        "https://delightful-coast-00b044310.7.azurestaticapps.net"
-    ]
-
-    if origin in allowed_origins:
-        response.headers["Access-Control-Allow-Origin"] = origin
-
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
-    response.headers["Access-Control-Allow-Credentials"] = "true"
-
-    return response
-
-
-@app.route('/api/<path:path>', methods=['OPTIONS'])
-def handle_options(path):
-    return '', 200
 
 swagger_config = {
     "headers": [],
@@ -99,19 +75,16 @@ swagger_template = {
 
 swagger = Swagger(app, config=swagger_config, template=swagger_template)
 
-
 db.init_app(app)
 
 with app.app_context():
     db.create_all()
-
 
 app.register_blueprint(auth_bp, url_prefix="/api")
 app.register_blueprint(users_bp, url_prefix="/api")
 app.register_blueprint(metrics_bp, url_prefix="/api")
 app.register_blueprint(network_flow_bp, url_prefix="/api")
 app.register_blueprint(ml_bp, url_prefix="/api")
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)
