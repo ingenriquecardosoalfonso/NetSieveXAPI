@@ -17,16 +17,14 @@ app = Flask(__name__)
 app.url_map.strict_slashes = False
 app.config.from_object(Config)
 
-CORS(app,
-     origins=[
-         "http://localhost:5173",
-         "https://localhost:5173",
-         "https://delightful-coast-00b044310.7.azurestaticapps.net"
-     ],
-     supports_credentials=True,
-     allow_headers=["Content-Type", "Authorization"],
-     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-)
+CORS(app, resources={r"/api/*": {
+    "origins": [
+        "http://localhost:5173",
+        "https://localhost:5173",
+        "https://delightful-coast-00b044310.7.azurestaticapps.net"
+    ],
+    "supports_credentials": True
+}})
 
 swagger_config = {
     "headers": [],
