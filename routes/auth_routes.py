@@ -5,38 +5,17 @@ auth_bp = Blueprint('auth', __name__)
 service = AuthService()
 
 
-@auth_bp.route('/api/auth/register', methods=['POST'])
+@auth_bp.route('/auth/register', methods=['POST', 'OPTIONS'])
 def register():
+    
+    if request.method == 'OPTIONS':
+        return '', 200
+
     """
     Create user
     ---
     tags:
       - Auth
-    parameters:
-      - in: body
-        name: body
-        required: true
-        schema:
-          type: object
-          required:
-            - name
-            - email
-            - password
-          properties:
-            name:
-              type: string
-              example: Juan
-            email:
-              type: string
-              example: juan@test.com
-            password:
-              type: string
-              example: 123456
-    responses:
-      200:
-        description: User created successfully
-      400:
-        description: Error in the data
     """
     try:
         data = request.get_json()
@@ -56,39 +35,17 @@ def register():
         return jsonify({"mensaje": str(e)}), 500
 
 
-@auth_bp.route('/api/auth/login', methods=['POST'])
+@auth_bp.route('/auth/login', methods=['POST', 'OPTIONS'])
 def login():
+    
+    if request.method == 'OPTIONS':
+        return '', 200
+
     """
     Login of user
     ---
     tags:
       - Auth
-    parameters:
-      - in: body
-        name: body
-        required: true
-        schema:
-          type: object
-          required:
-            - email
-            - password
-          properties:
-            email:
-              type: string
-              example: juan@test.com
-            password:
-              type: string
-              example: "123456"
-    responses:
-      200:
-        description: Retorna un token JWT
-        schema:
-          type: object
-          properties:
-            token:
-              type: string
-      401:
-        description: Credenciales inválidas
     """
     try:
         data = request.get_json()
